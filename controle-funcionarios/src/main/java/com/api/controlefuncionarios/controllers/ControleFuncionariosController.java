@@ -6,6 +6,10 @@ import com.api.controlefuncionarios.services.ControleFuncionariosService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,13 +60,23 @@ public class ControleFuncionariosController {
         //FuncionariosService.save(saveNewEmployee).
     }
 
+   //@GetMapping
+   //É necessário colocar @GetMapping para ser um método Get é para retornar dados do Banco de Dados.
+   //public ResponseEntity<List<ControleFuncionariosModel>> getAllControleFuncionarios(){
+   //    //Diferente do Post acima, a resposta do Get é uma lista List de objetos salvos ControleFuncionariosModel.
+   //    //getAllControleFuncionarios é um compando pra deternar tudo.
+   //    return ResponseEntity.status(HttpStatus.OK).body(controleFuncionariosService.findAll());
+   //    //Retorna a resposta do status no método, que é "Ok" e vai buscar todos, através do Service.
+   //}
+
     @GetMapping
-    //É necessário colocar @GetMapping para ser um método Get é para retornar dados do Banco de Dados.
-    public ResponseEntity<List<ControleFuncionariosModel>> getAllControleFuncionarios(){
-        //Diferente do Post acima, a resposta do Get é uma lista List de objetos salvos ControleFuncionariosModel.
-        //getAllControleFuncionarios é um compando pra deternar tudo.
-        return ResponseEntity.status(HttpStatus.OK).body(controleFuncionariosService.findAll());
-        //Retorna a resposta do status no método, que é "Ok" e vai buscar todos, através do Service.
+    public ResponseEntity<Page<ControleFuncionariosModel>> getAllControleFuncionarios(@PageableDefault(page = 0, size = 10, sort = "id", direction = Sort.Direction.ASC)Pageable pageable){
+        return ResponseEntity.status(HttpStatus.OK).body(controleFuncionariosService.findAll(pageable));
+        //Fizemos uma melhoria na forma de buscar os funcionários. No comentário acima, está a forma de buscar em lista
+        //que é a forma mais básica (comentada para não dar problema para o código). Melhoramos ela para o formato de
+        //busca ser por página Page. Essa forma pode não ser significativa quando são poucos funcionários, mas tem
+        //uma grande importancia para um BD com muito funcionário. Por tanto é melhor deixar assim pois aproveita para
+        //os dois tipos de BD.
     }
 
     @GetMapping("/{id}")

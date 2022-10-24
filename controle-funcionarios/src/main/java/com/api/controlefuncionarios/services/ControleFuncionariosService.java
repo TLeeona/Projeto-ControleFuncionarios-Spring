@@ -4,6 +4,9 @@ import com.api.controlefuncionarios.models.ControleFuncionariosModel;
 import com.api.controlefuncionarios.repositories.ControleFuncionariosRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,14 +47,18 @@ public class ControleFuncionariosService {
         //controleFuncionariosRepository está roxo, o que significa que é o retorno é para o Repository.
     }
 
-    public List<ControleFuncionariosModel> findAll() {
-        return controleFuncionariosRepository.findAll();
-        //Esse método vai retornar uma lista com todos os dados presentes, referente a isso, e vai retornar para o
-        //Repository.
-        //O método List não é personalisado, já tem dentro do JPA.
-        //Lembrando: O Service é o meio de campo entre o Controller e o Repository. Então tudo o que o Controller
-        //precisar do Repositopry, tem que ser solicitado através do Service.
-    }
+ //   public List<ControleFuncionariosModel> findAll() {
+ //       return controleFuncionariosRepository.findAll();
+ //       //Esse método vai retornar uma lista com todos os dados presentes, referente a isso, e vai retornar para o
+ //       //Repository.
+ //       //O método List não é personalisado, já tem dentro do JPA.
+ //       //Lembrando: O Service é o meio de campo entre o Controller e o Repository. Então tudo o que o Controller
+ //       //precisar do Repositopry, tem que ser solicitado através do Service.
+ //   }
+    public Page<ControleFuncionariosModel> findAll(Pageable pageable) {
+        return controleFuncionariosRepository.findAll(pageable);
+      }
+
 
     public Optional<ControleFuncionariosModel> findByID(UUID id) {
         return controleFuncionariosRepository.findById(id);
